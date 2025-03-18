@@ -50,8 +50,3 @@ $desPays = getCountriesByContinent($continent);
     </section>
   </div>
 </main>
-
-<?php
-require_once 'javascripts.php';
-require_once 'footer.php';
-?>
