@@ -12,41 +12,55 @@
  * @link      https://github.com/sio-melun/geoworld
  */
 
-?>
-<?php  require_once 'header.php'; ?>
-<?php
-require_once 'inc/manager-db.php';
-$continent = 'Asia';
-$desPays = getCountriesByContinent($continent);
+require_once 'header.php'; 
+require_once 'inc/manager-db.php'; // Inclure le fichier qui gère la connexion et les requêtes à la base de données
+
+// Vérifier si un continent est sélectionné, sinon afficher tous les pays
+if (isset($_GET['name']) && !empty($_GET['name'])) {
+    $continent = $_GET['name'];
+    $desPays = getCountriesByContinent($continent);
+} else {
+    $continent = "Monde";
+    $desPays = getAllCountries();
+}
+
 ?>
 
 <main role="main" class="flex-shrink-0">
-
   <div class="container">
-    <h1>Les pays en Asie</h1>
-    <div>
-     <table class="table">
-         <tr>
-           <th>Nom</th>
-           <th>Population</th>
-           <th>President</th>
-           <th>Surface</th>
-         </tr>
-       <?php
-       // $desPays est un tableau dont les éléments sont des objets représentant
-       // des caractéristiques d'un pays (en relation avec les colonnes de la table Country)
-         foreach ($desPays as $pays){ ?>
-          <tr>
-            <td> <?php echo $pays->Name ?></td>
-            <td> <?php echo $pays->Population ?></td>
-            <td> <?php echo $pays->HeadOfState ?></td>
-            <td> <?php echo $pays->SurfaceArea ?></td>
+    <!-- Affichage du titre -->
+    <h1>Les pays en <?= htmlspecialchars($continent) ?></h1>
 
+    <div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Population</th>
+            <th>Président</th>
+            <th>Surface</th>
+            <th>Capitale</th> <!-- Nouvelle colonne pour la capitale -->
           </tr>
-          <?php }   ?>
-     </table>
+        </thead>
+        <tbody>
+          <?php 
+          // Vérifiez si $desPays contient des pays
+          if (!empty($desPays)) {
+              foreach ($desPays as $pays) { ?>
+                  <tr>
+                    <td><?= htmlspecialchars($pays->Name) ?></td>
+                    <td><?= htmlspecialchars($pays->Population) ?></td>
+                    <td><?= htmlspecialchars($pays->HeadOfState) ?></td>
+                    <td><?= htmlspecialchars($pays->SurfaceArea) ?></td>
+                    <td><?= htmlspecialchars($pays->Capital) ?></td> <!-- Affichage de la capitale -->
+                  </tr>
+              <?php }
+          } else {
+              echo "<tr><td colspan='5'>Aucun pays trouvé.</td></tr>"; // Modification du colspan pour 5 colonnes
+          }
+          ?>
+        </tbody>
+      </table>
     </div>
-      </div>
-    </section>
   </div>
 </main>

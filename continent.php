@@ -1,7 +1,7 @@
 <?php
 require_once 'inc/manager-db.php'; // Inclure le fichier qui gère la connexion et les requêtes à la base de données
 $lesContinents = getContinent(); // Récupérer les continents depuis la base de données
-$lesPays = getAllCountries(); // Récupérer tous les pays
+$lesPays = getAllCountries(); // Récupérer les pays (si besoin)
 ?>
 
 <!doctype html>
@@ -15,15 +15,22 @@ $lesPays = getAllCountries(); // Récupérer tous les pays
 
   <!-- CSS de Bootstrap -->
   <link href="assets/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-
   <style>
-    .dropdown-menu {
-      max-height: 400px;
-      overflow-y: auto;
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
     }
-    
-  </style>
 
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+      dropdown-menu{
+max-height: 400px;
+overflow-y: auto;
+}
+    }
+  </style>
   <!-- Styles personnalisés -->
   <link href="css/custom.css" rel="stylesheet">
 </head>
@@ -60,18 +67,7 @@ $lesPays = getAllCountries(); // Récupérer tous les pays
               <?php endforeach; ?>
             </div>
           </li>
-
-          <!-- Menu déroulant Pays -->
-          <li class="nav-item dropdown">
-<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"
-aria-expanded="false">pays</a>
-<div class="dropdown-menu" aria-labelledby="dropdown01">
-<?php foreach($lesPays as $lepays) : ?>
-<a class="dropdown-item" href="index2.php?name=<?= $lepays->Name ; ?>"><?= $lepays->Name; ?> </a>
-<?php endforeach ; ?>
-</div>
-</li>
-        <!-- Autres liens -->
+        </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="login">Connexion</a>
@@ -85,8 +81,6 @@ aria-expanded="false">pays</a>
             </a>
           </li>
         </ul>
-
-        <!-- Formulaire de recherche -->
         <form class="form-inline my-2 my-lg-0">
           <input class="form-control mr-sm-2" type="text" placeholder="Rechercher" aria-label="Search">
           <button class="btn btn-secondary my-2 my-sm-0" type="submit">Rechercher</button>
@@ -95,6 +89,8 @@ aria-expanded="false">pays</a>
     </nav>
   </header>
 
+  <!-- Le reste du contenu de la page -->
+  
   <!-- jQuery (nécessaire pour Bootstrap 4) -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
