@@ -12,55 +12,70 @@
  * @link      https://github.com/sio-melun/geoworld
  */
 
-require_once 'header.php'; 
-require_once 'inc/manager-db.php'; // Inclure le fichier qui gère la connexion et les requêtes à la base de données
+?>
 
-// Vérifier si un continent est sélectionné, sinon afficher tous les pays
-if (isset($_GET['name']) && !empty($_GET['name'])) {
-    $continent = $_GET['name'];
-    $desPays = getCountriesByContinent($continent);
-} else {
-    $continent = "Monde";
-    $desPays = getAllCountries();
+<?php
+require_once 'header.php';
+require_once 'inc/manager-db.php';
+if (isset($_GET['name']) && !empty($_GET['name']) ){
+$continent = ($_GET['name']);
+$desPays = getCountriesByContinent($continent);
+}
+else{
+$continent = "Monde";
+$desPays = getAllCountries();
 }
 
 ?>
 
 <main role="main" class="flex-shrink-0">
-  <div class="container">
-    <!-- Affichage du titre -->
-    <h1>Les pays en <?= htmlspecialchars($continent) ?></h1>
 
+  <div class="container">
+    
     <div>
-      <table class="table">
-        <thead>
+  
+         <tr>
+         <?php echo "<h1>Les pays ".$continent."</h1>"?>
+         <table id="example" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+         <th>drapeau</th>
+           <th>Nom</th>
+           <th>Population</th>
+           <th>Surface</th>
+           <th>Chef etat</th>
+           <th>Capitale</th>
+         </tr>
+</thead>
+<tbody>
+       <?php
+       // $desPays est un tableau dont les éléments sont des objets représentant
+       // des caractéristiques d'un pays (en relation avec les colonnes de la table Country)
+       foreach ($desPays as $pays) { ?>
           <tr>
-            <th>Nom</th>
-            <th>Population</th>
-            <th>Président</th>
-            <th>Surface</th>
-            <th>Capitale</th> <!-- Nouvelle colonne pour la capitale -->
+          <td> <?php $source= "images/flag/" .strtolower($pays->Code2).".png"?>
+        <img src=<?= $source; ?> height="45" width="60" ></td>
+
+          <td><a href="pays.php?id=<?php echo $pays->id; ?>"><?php echo $pays->Name; ?></a></td>
+        
+            <td> <?php echo $pays->Population ?></td>
+            <td> <?php echo $pays->SurfaceArea?></td>
+            <td> <?php echo $pays->HeadOfState?></td>
+            <td> <?php $capitale = getCapital($pays->Capital);
+            if ($capitale) {
+                echo $capitale->Name;
+            } else {
+                echo '-----';
+            }?></td>
+            
           </tr>
-        </thead>
-        <tbody>
-          <?php 
-          // Vérifiez si $desPays contient des pays
-          if (!empty($desPays)) {
-              foreach ($desPays as $pays) { ?>
-                  <tr>
-                    <td><?= htmlspecialchars($pays->Name) ?></td>
-                    <td><?= htmlspecialchars($pays->Population) ?></td>
-                    <td><?= htmlspecialchars($pays->HeadOfState) ?></td>
-                    <td><?= htmlspecialchars($pays->SurfaceArea) ?></td>
-                    <td><?= htmlspecialchars($pays->Capital) ?></td> <!-- Affichage de la capitale -->
-                  </tr>
-              <?php }
-          } else {
-              echo "<tr><td colspan='5'>Aucun pays trouvé.</td></tr>"; // Modification du colspan pour 5 colonnes
-          }
-          ?>
-        </tbody>
-      </table>
+          <?php } ?>
+          </tbody>
+     </table>
     </div>
   </div>
 </main>
+
+<?php
+require_once 'javascripts.php';
+require_once 'footer.php';
+?>
